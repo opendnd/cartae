@@ -39,6 +39,11 @@ func loop(src image.Image, si int, sj int, sm int) {
 		// calculate the number of layers
 		limit := int(math.Exp2(float64(i))) - 1
 
+		// resize at this scale
+		size := 256
+		scale := int(math.Exp2(float64(i))) * size
+		img := imaging.Resize(src, scale, 0, imaging.Lanczos)
+
 		// count from 0 to limit
 		for j := sj; j <= limit; j++ {
 			// create the dir
@@ -47,11 +52,6 @@ func loop(src image.Image, si int, sj int, sm int) {
 			if err != nil {
 				log.Fatalf("failed to create directory: %v", err)
 			}
-
-			// resize at this scale
-			size := 256
-			scale := int(math.Exp2(float64(i))) * size
-			img := imaging.Resize(src, scale, 0, imaging.Lanczos)
 
 			// count the same limit for the images
 			for m := sm; m <= limit; m++ {
